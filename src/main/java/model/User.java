@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.yaml.snakeyaml.tokens.Token;
+
 
 @Entity
 @Table(name="user")

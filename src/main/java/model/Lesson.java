@@ -5,9 +5,12 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.joda.time.DateTime;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="lesson")
@@ -16,11 +19,16 @@ public class Lesson {
 	
 	@Id @GeneratedValue
 	long id;
-	String title;
 	
+	
+	String title;
+	@JsonProperty("date_update")
 	DateTime dateUpdate;
+	@JsonProperty("date_create")
 	DateTime dateCreate;
 	
+	@JsonProperty("lesson_notes")
+	@OneToMany
 	List<LessonNote> lessonNotes;
 	
 	//The combination of these fields should be unique
@@ -33,6 +41,46 @@ public class Lesson {
 	{
 		
 	}
+
+	
+
+	public Lesson(Lesson oldLesson) {
+		this.title = oldLesson.getTitle();
+		this.dateUpdate = oldLesson.getDateUpdate();
+		this.dateCreate = oldLesson.getDateCreate();
+		this.lessonNotes = oldLesson.getLessonNotes();
+		this.location = oldLesson.getLocation();
+		this.dateStart = oldLesson.getDateStart();
+		this.dateEnd = oldLesson.getDateEnd();
+	}
+
+
+
+	public Lesson(String title, DateTime dateUpdate, DateTime dateCreate, String location, DateTime dateStart,
+			DateTime dateEnd) {
+		super();
+		this.title = title;
+		this.dateUpdate = dateUpdate;
+		this.dateCreate = dateCreate;
+		this.location = location;
+		this.dateStart = dateStart;
+		this.dateEnd = dateEnd;
+	}
+
+
+
+	public Lesson(String title, DateTime dateUpdate, DateTime dateCreate, List<LessonNote> lessonNotes, String location,
+			DateTime dateStart, DateTime dateEnd) {
+		super();
+		this.title = title;
+		this.dateUpdate = dateUpdate;
+		this.dateCreate = dateCreate;
+		this.lessonNotes = lessonNotes;
+		this.location = location;
+		this.dateStart = dateStart;
+		this.dateEnd = dateEnd;
+	}
+
 
 
 	public long getId() {
