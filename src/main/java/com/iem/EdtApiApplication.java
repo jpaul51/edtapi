@@ -10,6 +10,8 @@ import controller.InitController;
 @SpringBootApplication
 @EnableAutoConfiguration
 @ComponentScan(basePackageClasses=InitController.class)
+@ComponentScan("controller")
+@ComponentScan("service")
 public class EdtApiApplication {
 
 	public static void main(String[] args) {

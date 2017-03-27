@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Table(name="lesson")
 public class Lesson {
 
+	
 	
 	@Id @GeneratedValue
 	long id;
@@ -32,9 +34,14 @@ public class Lesson {
 	List<LessonNote> lessonNotes;
 	
 	//The combination of these fields should be unique
-	String location;//Room
+	
+	@ManyToOne
+	Room room;
+	
 	DateTime dateStart; 
 	DateTime dateEnd; 
+	
+	String description;
 	
 	
 	public Lesson()
@@ -49,36 +56,51 @@ public class Lesson {
 		this.dateUpdate = oldLesson.getDateUpdate();
 		this.dateCreate = oldLesson.getDateCreate();
 		this.lessonNotes = oldLesson.getLessonNotes();
-		this.location = oldLesson.getLocation();
+		this.room = oldLesson.getRoom();
 		this.dateStart = oldLesson.getDateStart();
 		this.dateEnd = oldLesson.getDateEnd();
+		this.description = oldLesson.getDescription();
 	}
 
 
 
-	public Lesson(String title, DateTime dateUpdate, DateTime dateCreate, String location, DateTime dateStart,
+	public Lesson(String title, DateTime dateUpdate, DateTime dateCreate, Room location, DateTime dateStart,
 			DateTime dateEnd) {
 		super();
 		this.title = title;
 		this.dateUpdate = dateUpdate;
 		this.dateCreate = dateCreate;
-		this.location = location;
+		this.room = location;
 		this.dateStart = dateStart;
 		this.dateEnd = dateEnd;
 	}
 
 
 
-	public Lesson(String title, DateTime dateUpdate, DateTime dateCreate, List<LessonNote> lessonNotes, String location,
+	public Lesson(String title, DateTime dateUpdate, DateTime dateCreate, List<LessonNote> lessonNotes, Room location,
 			DateTime dateStart, DateTime dateEnd) {
 		super();
 		this.title = title;
 		this.dateUpdate = dateUpdate;
 		this.dateCreate = dateCreate;
 		this.lessonNotes = lessonNotes;
-		this.location = location;
+		this.room = location;
 		this.dateStart = dateStart;
 		this.dateEnd = dateEnd;
+	}
+
+
+
+	
+	
+	public String getDescription() {
+		return description;
+	}
+
+
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 
@@ -133,14 +155,6 @@ public class Lesson {
 	}
 
 
-	public String getLocation() {
-		return location;
-	}
-
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
 
 
 	public DateTime getDateStart() {
@@ -163,6 +177,19 @@ public class Lesson {
 	}
 
 
+
+	public Room getRoom() {
+		return room;
+	}
+
+
+
+	public void setRoom(Room room) {
+		this.room = room;
+	}
+
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -171,12 +198,14 @@ public class Lesson {
 		result = prime * result + ((dateEnd == null) ? 0 : dateEnd.hashCode());
 		result = prime * result + ((dateStart == null) ? 0 : dateStart.hashCode());
 		result = prime * result + ((dateUpdate == null) ? 0 : dateUpdate.hashCode());
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((lessonNotes == null) ? 0 : lessonNotes.hashCode());
-		result = prime * result + ((location == null) ? 0 : location.hashCode());
+		result = prime * result + ((room == null) ? 0 : room.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
+
 
 
 	@Override
@@ -208,6 +237,11 @@ public class Lesson {
 				return false;
 		} else if (!dateUpdate.equals(other.dateUpdate))
 			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
 		if (id != other.id)
 			return false;
 		if (lessonNotes == null) {
@@ -215,10 +249,10 @@ public class Lesson {
 				return false;
 		} else if (!lessonNotes.equals(other.lessonNotes))
 			return false;
-		if (location == null) {
-			if (other.location != null)
+		if (room == null) {
+			if (other.room != null)
 				return false;
-		} else if (!location.equals(other.location))
+		} else if (!room.equals(other.room))
 			return false;
 		if (title == null) {
 			if (other.title != null)
@@ -227,6 +261,11 @@ public class Lesson {
 			return false;
 		return true;
 	}
+
+
+
+
+	
 	
 	
 	
