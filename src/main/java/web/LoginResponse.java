@@ -10,6 +10,6 @@ public class LoginResponse {
 	@JsonProperty(value = "user_id")
 	public String accessToken;
 	
+	@JsonProperty(value = "refresh_token")
 	public String refreshToken;
-
 }

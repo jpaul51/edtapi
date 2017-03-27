@@ -3,12 +3,15 @@ package service;
 import java.security.InvalidParameterException;
 import java.util.Map;
 
+import model.Token;
+import model.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dao.AuthRepository;
+import dao.UserRepository;
 import web.LoginBody;
-import web.LoginResponse;
 
 @Service
 public class AuthService {
@@ -16,7 +19,11 @@ public class AuthService {
 	@Autowired
 	private AuthRepository authRepository;
 
-	public LoginResponse login(LoginBody loginBody){
+	@Autowired
+	private UserRepository userRepository;
+	
+	
+	public Map<String, String> login(LoginBody loginBody){
 		
 		if(loginBody == null){
 			throw new InvalidParameterException("loginBody should not be null or empty");
@@ -28,22 +35,13 @@ public class AuthService {
 			throw new InvalidParameterException("password should not be null or empty");
 		}
 		
-		Map<String, String> bulkResponse = authRepository.login(loginBody.login, loginBody.password);
+		User user = new User();
 		
-		LoginResponse response = new LoginResponse();
+		userRepository.findOne(Long.valueOf(1));
 		
-		if(bulkResponse.containsKey("userID")){
-			response.userID = bulkResponse.get("userID");
-		}
+		Token token = authRepository.findByUser(user);
+		System.out.println(token.getAccessToken());
 		
-		if(bulkResponse.containsKey("accessToken")){
-			response.accessToken = bulkResponse.get("accessToken");
-		}
-		
-		if(bulkResponse.containsKey("refreshToken")){
-			response.refreshToken = bulkResponse.get("refreshToken");
-		}
-		
-		return response;	
+		return null;
 	}
 }

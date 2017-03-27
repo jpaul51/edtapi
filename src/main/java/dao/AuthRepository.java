@@ -1,21 +1,17 @@
 package dao;
 
-import java.util.HashMap;
-import java.util.Map;
 
-import org.springframework.stereotype.Repository;
+import model.Token;
+import model.User;
 
-@Repository
-public class AuthRepository {
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Component;
+
+@Component
+public interface AuthRepository extends CrudRepository<Token, Long> {
 	
-	public Map<String, String> login(String login, String password){
-		
-		Map<String, String> result = new HashMap<>();
-		result.put("userID", "1");
-		result.put("accessToken", "zEFHFOQHeskfeifsifuZKQDKBZKkzdkz");
-		result.put("refreshToken", "lhvisguzHFjfjhGViluyOMoklJkgjhga");
-
-		return result;
-	}
-
+	@Query( value = "Select t from Token t where t.user = :user" )
+	Token findByUser(@Param("user") User user);
 }

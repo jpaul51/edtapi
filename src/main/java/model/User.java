@@ -5,77 +5,61 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="user")
-public  class User {
-
-	
+public class User {
 	
 	@Id @GeneratedValue
 	long id;
-	
 	String login;
 	String mail;
-	String password;
+	String password;	
+	String userGroup;
 	
-	String group;
-	
-
 	public User()
-	{
-		
-	}
-
+	{}
 
 	public long getId() {
 		return id;
 	}
 
-
 	public void setId(long id) {
 		this.id = id;
 	}
-
 
 	public String getLogin() {
 		return login;
 	}
 
-
 	public void setLogin(String login) {
 		this.login = login;
 	}
-
 
 	public String getMail() {
 		return mail;
 	}
 
-
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
-
 
 	public String getPassword() {
 		return password;
 	}
 
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-
-	public String getGroup() {
-		return group;
+	public String getUserGroup() {
+		return userGroup;
 	}
 
 
-	public void setGroup(String group) {
-		this.group = group;
+	public void setUserGroup(String group) {
+		this.userGroup = group;
 	}
 
 
@@ -83,7 +67,7 @@ public  class User {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((group == null) ? 0 : group.hashCode());
+		result = prime * result + ((userGroup == null) ? 0 : userGroup.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((mail == null) ? 0 : mail.hashCode());
@@ -101,10 +85,10 @@ public  class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (group == null) {
-			if (other.group != null)
+		if (userGroup == null) {
+			if (other.userGroup != null)
 				return false;
-		} else if (!group.equals(other.group))
+		} else if (!userGroup.equals(other.userGroup))
 			return false;
 		if (id != other.id)
 			return false;
