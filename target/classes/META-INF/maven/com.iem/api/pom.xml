@@ -22,9 +22,18 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<property type="org.jadira.usertype.dateandtime.joda.PersistentDateTime" name="dateTime"/>
+		
 	</properties>
 
 	<dependencies>
+	<dependency>
+  <groupId>javax.inject</groupId>
+  <artifactId>javax.inject</artifactId>
+  <version>1</version>
+</dependency>
+
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -48,18 +57,23 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	<!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
+<!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
 <dependency>
     <groupId>joda-time</groupId>
     <artifactId>joda-time</artifactId>
-    <version>2.9.7</version>
+    <version>2.9.9</version>
 </dependency>
+
 	
 	</dependencies>
 
@@ -68,6 +82,13 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin><groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					</configuration>
 			</plugin>
 		</plugins>
 	</build>

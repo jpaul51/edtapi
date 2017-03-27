@@ -1,16 +1,41 @@
 package controller;
 
+
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import model.Lesson;
+import service.LessonService;
+
+
+
+
 
 
 @RestController
 @Configuration
-@EnableJpaRepositories("dao")
+//@EnableJpaRepositories("dao")
 @EntityScan("model")
-public class InitController {	
+public class InitController {
+	
+	@Autowired private LessonService lessonService;
+	
+	
+	
+	@RequestMapping(value="/init",method = RequestMethod.GET)
+	@ResponseBody
+	public List<Lesson> initDb()
+	{
+		return (List<Lesson>) lessonService.loadLessons();
+	
+	}
+	
 }
