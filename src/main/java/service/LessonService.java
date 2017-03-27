@@ -60,6 +60,8 @@ public class LessonService {
 		CustomUser user = new CustomUser();
 		user.setLogin("test");
 		
+		
+		
 		lessonRepo.save(lessons);
 		userRepo.save(user);
 		
@@ -79,19 +81,21 @@ public class LessonService {
 		HashMap<String,Room> roomsByName = new HashMap<>();
 		ArrayList<Lesson> lessons = new ArrayList<>();
 		DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyyMMdd'T'HHmmss'Z'");
-		Lesson oneLesson = new Lesson();;
+		Lesson oneLesson = new Lesson("null");
+		
 		try(BufferedReader br = new BufferedReader(new FileReader(lessonFile))) {
 		    for(String line; (line = br.readLine()) != null; ) {
 		        // process the line.
 		    	
 		    	if(line.startsWith(LESSON_START))
 		    	{
-		    		
+		    		System.out.println("START");
 		    		oneLesson = new Lesson();
 		    	}
 		    	else if(line.startsWith(LESSON_END))
 		    	{
-		 
+
+		    		System.out.println("END ADD lesson with "+oneLesson.getlessonUid());
 		    		lessons.add(new Lesson(oneLesson));
 		    	}
 		    	else if(line.startsWith(LESSON_UPDATE))
@@ -143,12 +147,15 @@ public class LessonService {
 		    	else if(line.startsWith(LESSON_UID))
 		    	{
 		    		
+		    		String uid = line.substring(line.indexOf(LESSON_UID)+LESSON_UID.length());
+		    		System.out.println("SET UID: "+uid);
+		    		oneLesson.setlessonUid(uid);
 		    	}
 		    	else if(line.startsWith(LESSON_CREATED_DATE))
 		    	{
 		    		String createDateString = line.substring(line.indexOf(LESSON_CREATED_DATE)+LESSON_CREATED_DATE.length());
 		    		DateTime dt = formatter.parseDateTime(createDateString);
-		    		oneLesson.setDateUpdate(dt);
+		    		
 		    		oneLesson.setDateCreate(dt);
 		    	}
 		    	else if(line.startsWith(LESSON_LAST_MODIFIED_DATE))

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 import model.Lesson;
 
 @Component
-public interface LessonRepository extends CrudRepository<Lesson, Long> {
+public interface LessonRepository extends CrudRepository<Lesson, String> {
 
 }
