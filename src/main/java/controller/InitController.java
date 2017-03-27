@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,7 +23,7 @@ import service.LessonService;
 
 @RestController
 @Configuration
-//@EnableJpaRepositories("dao")
+@EnableJpaRepositories("dao")
 @EntityScan("model")
 public class InitController {
 	
@@ -32,9 +33,18 @@ public class InitController {
 	
 	@RequestMapping(value="/init",method = RequestMethod.GET)
 	@ResponseBody
-	public List<Lesson> initDb()
+	public void initDb()
 	{
-		return (List<Lesson>) lessonService.loadLessons();
+		 lessonService.loadLessons();
+	
+	}
+	
+	
+	@RequestMapping(value="/lessons",method = RequestMethod.GET)
+	@ResponseBody
+	public List<Lesson> getAllLessons()
+	{
+		 return lessonService.getAllLessons();
 	
 	}
 	

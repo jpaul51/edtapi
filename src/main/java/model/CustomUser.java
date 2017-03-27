@@ -8,8 +8,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-@Table(name="user")
-public class User {
+@Table(name="custom_user")
+public  class CustomUser {
 	
 	@Id @GeneratedValue
 	long id;
@@ -17,9 +17,11 @@ public class User {
 	String mail;
 	String password;	
 	String userGroup;
-	
-	public User()
-	{}
+
+	public CustomUser()
+	{
+		
+	}
 
 	public long getId() {
 		return id;
@@ -52,8 +54,8 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	public String getUserGroup() {
+	
+	public String getGroup() {
 		return userGroup;
 	}
 
@@ -84,7 +86,7 @@ public class User {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		CustomUser other = (CustomUser) obj;
 		if (userGroup == null) {
 			if (other.userGroup != null)
 				return false;

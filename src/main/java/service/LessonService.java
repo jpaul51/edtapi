@@ -7,16 +7,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import dao.CustomUserRepository;
 import dao.LessonRepository;
+import dao.RoomRepository;
+import model.CustomUser;
 import model.Lesson;
 import model.Room;
 
@@ -28,7 +33,7 @@ public class LessonService {
 	final String FILEPATH = "src/main/resources/IEMB.ics";
 	
 	
-	private final String LESSON_START="START:VEVENT";
+	private final String LESSON_START="BEGIN:VEVENT";
 	private final String LESSON_END="END:VEVENT";
 	
 	private final String LESSON_UPDATE="DTSTAMP:";
@@ -44,13 +49,28 @@ public class LessonService {
 	
 	
 	
-	 LessonRepository lessonRepo;
+	 @Autowired LessonRepository lessonRepo;
+	@Autowired RoomRepository roomRepo;
+	@Autowired CustomUserRepository userRepo;
 	
-	
-	public Iterable<Lesson> loadLessons()
+	public void loadLessons()
 	{
-		return getLessonsFromFile();
+		ArrayList<Lesson> lessons =  (ArrayList<Lesson>) getLessonsFromFile();
+		
+		CustomUser user = new CustomUser();
+		user.setLogin("test");
+		
+		lessonRepo.save(lessons);
+		userRepo.save(user);
+		
 	}
+	
+	
+	public List<Lesson> getAllLessons()
+	{
+		return (List<Lesson>) lessonRepo.findAll();
+	}
+	
 	
 	private Iterable<Lesson> getLessonsFromFile()
 	{
@@ -66,13 +86,12 @@ public class LessonService {
 		    	
 		    	if(line.startsWith(LESSON_START))
 		    	{
-		    		System.out.println("START");
+		    		
 		    		oneLesson = new Lesson();
 		    	}
 		    	else if(line.startsWith(LESSON_END))
 		    	{
-
-		    		System.out.println("START");
+		 
 		    		lessons.add(new Lesson(oneLesson));
 		    	}
 		    	else if(line.startsWith(LESSON_UPDATE))
@@ -85,32 +104,41 @@ public class LessonService {
 		    	{
 		    		String startDateString = line.substring(line.indexOf(LESSON_DATE_START)+LESSON_DATE_START.length());
 		    		DateTime dt = formatter.parseDateTime(startDateString);
-		    		oneLesson.setDateUpdate(dt);
+		    		oneLesson.setDateStart(dt);
 		    	}
 		    	else if(line.startsWith(LESSON_DATE_END))
 		    	{
-		    		System.out.println(line);
+		    		
 		    		String endDateString = line.substring(line.indexOf(LESSON_DATE_END)+LESSON_DATE_END.length());
-		    		System.out.println(endDateString);
+		    		
 		    		DateTime dt = formatter.parseDateTime(endDateString);
-		    		oneLesson.setDateUpdate(dt);
+		    		
+		    		oneLesson.setDateEnd(dt);
 		    	}
 		    	else if(line.startsWith(LESSON_SUMMARY))
 		    	{
-		    		oneLesson.setDescription(line);		    		
+		    		String endSummaryString = line.substring(line.indexOf(LESSON_SUMMARY)+LESSON_SUMMARY.length());
+		    		oneLesson.setTitle(endSummaryString);		    		
 		    	}
 		    	else if(line.startsWith(LESSON_LOCATION))
 		    	{
-		    		Room r = new Room(line);
+		    		String roomName = line.substring(line.indexOf(LESSON_LOCATION)+LESSON_LOCATION.length());
+		    		Room r = new Room(roomName);
 		    		if(roomsByName.containsKey(r.getName()))
 		    		{
 		    			r = roomsByName.get(r.getName());
+		    		}
+		    		else
+		    		{
+		    			roomsByName.put(r.getName(), r);
 		    		}
 		    		oneLesson.setRoom(r);
 		    	}
 		    	else if(line.startsWith(LESSON_DESCRIPTION))
 		    	{
-		    		oneLesson.setDescription(line);
+		    		String description = line.substring(line.indexOf(LESSON_DESCRIPTION)+LESSON_DESCRIPTION.length());
+		    		
+		    		oneLesson.setDescription(description);
 		    	}
 		    	else if(line.startsWith(LESSON_UID))
 		    	{
@@ -121,12 +149,14 @@ public class LessonService {
 		    		String createDateString = line.substring(line.indexOf(LESSON_CREATED_DATE)+LESSON_CREATED_DATE.length());
 		    		DateTime dt = formatter.parseDateTime(createDateString);
 		    		oneLesson.setDateUpdate(dt);
+		    		oneLesson.setDateCreate(dt);
 		    	}
 		    	else if(line.startsWith(LESSON_LAST_MODIFIED_DATE))
 		    	{
-		    		String modifiedDateString = line.substring(line.indexOf(LESSON_LAST_MODIFIED_DATE)+LESSON_LAST_MODIFIED_DATE.length());
-		    		DateTime dt = formatter.parseDateTime(modifiedDateString);
-		    		oneLesson.setDateUpdate(dt);
+		    		//String modifiedDateString = line.substring(line.indexOf(LESSON_LAST_MODIFIED_DATE)+LESSON_LAST_MODIFIED_DATE.length());
+		    		//DateTime dt = formatter.parseDateTime(modifiedDateString);
+		    		//oneLesson.set(dt);
+		    		
 		    	}
 		    		  
 		    	
@@ -139,7 +169,8 @@ public class LessonService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		System.out.println(roomsByName.size());
+		roomRepo.save(roomsByName.values());
 		return lessons;
 	}
 	

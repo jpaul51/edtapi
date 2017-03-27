@@ -18,7 +18,7 @@ public class Token {
 	Long id;
 	
 	@ManyToOne
-	User user;
+	CustomUser user;
 
 	@JsonProperty("access_token")
 	String accessToken;
@@ -46,12 +46,12 @@ public class Token {
 	}
 
 
-	public User getUser() {
+	public CustomUser getUser() {
 		return user;
 	}
 
 
-	public void setUser(User user) {
+	public void setUser(CustomUser user) {
 		this.user = user;
 	}
 
