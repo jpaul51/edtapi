@@ -12,11 +12,5 @@ import org.springframework.web.bind.annotation.RestController;
 @Configuration
 @EnableJpaRepositories("dao")
 @EntityScan("model")
-public class InitController {
-
-	
-	
-	
-	
-	
+public class InitController {	
 }

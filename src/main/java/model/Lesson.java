@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.joda.time.DateTime;
@@ -21,6 +22,7 @@ public class Lesson {
 	DateTime dateUpdate;
 	DateTime dateCreate;
 	
+	@OneToMany
 	List<LessonNote> lessonNotes;
 	
 	//The combination of these fields should be unique
