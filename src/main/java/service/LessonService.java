@@ -18,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import dao.CustomUserRepository;
 import dao.LessonRepository;
 import dao.RoomRepository;
+import model.CustomUser;
 import model.Lesson;
 import model.Room;
 
@@ -49,12 +51,17 @@ public class LessonService {
 	
 	 @Autowired LessonRepository lessonRepo;
 	@Autowired RoomRepository roomRepo;
+	@Autowired CustomUserRepository userRepo;
 	
 	public void loadLessons()
 	{
 		ArrayList<Lesson> lessons =  (ArrayList<Lesson>) getLessonsFromFile();
-		lessonRepo.save(lessons);
 		
+		CustomUser user = new CustomUser();
+		user.setLogin("test");
+		
+		lessonRepo.save(lessons);
+		userRepo.save(user);
 		
 	}
 	

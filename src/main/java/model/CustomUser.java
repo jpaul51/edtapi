@@ -8,8 +8,8 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name="user")
-public  class User {
+@Table(name="custom_user")
+public  class CustomUser {
 
 	
 	
@@ -20,10 +20,10 @@ public  class User {
 	String mail;
 	String password;
 	
-	String group;
+	String userGroup;
 	
 
-	public User()
+	public CustomUser()
 	{
 		
 	}
@@ -70,12 +70,12 @@ public  class User {
 
 
 	public String getGroup() {
-		return group;
+		return userGroup;
 	}
 
 
 	public void setGroup(String group) {
-		this.group = group;
+		this.userGroup = group;
 	}
 
 
@@ -83,7 +83,7 @@ public  class User {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((group == null) ? 0 : group.hashCode());
+		result = prime * result + ((userGroup == null) ? 0 : userGroup.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((mail == null) ? 0 : mail.hashCode());
@@ -100,11 +100,11 @@ public  class User {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
-		if (group == null) {
-			if (other.group != null)
+		CustomUser other = (CustomUser) obj;
+		if (userGroup == null) {
+			if (other.userGroup != null)
 				return false;
-		} else if (!group.equals(other.group))
+		} else if (!userGroup.equals(other.userGroup))
 			return false;
 		if (id != other.id)
 			return false;
