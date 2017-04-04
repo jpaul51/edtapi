@@ -50,6 +50,15 @@ public class AuthController {
 		return authService.getToken(refreshToken, userId);
 	}
 	
+	@RequestMapping(value = "/proxima/users/{user_id}", method = RequestMethod.GET)
+	public Map<String, String> detailsUser(
+			@RequestHeader(value = "access_token") String accessToken,
+			@RequestHeader(value = "user_id") Long userId,
+			@PathVariable("user_id") Long selectedUserId){
+		
+		return authService.detailsUser(accessToken, userId, selectedUserId);
+	}
+	
 	@RequestMapping(value = "proxima/debug/addUser", method = RequestMethod.GET)
 	@ResponseBody
 	public String login()

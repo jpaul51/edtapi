@@ -1,5 +1,6 @@
 package service;
 
+import java.security.InvalidParameterException;
 import java.util.Random;
 
 import model.CustomUser;
@@ -36,6 +37,7 @@ public class TokenService {
 			token = createToken(user);
 		} else {
 			if (token.getRefreshToken().equals(refreshToken)){
+				tokenRepository.delete(token.getId());
 				token = createToken(user);
 			} else {
 				throw new RuntimeException(String.format("wrong refresh token for user with login : %s", user.getLogin()));
@@ -59,7 +61,19 @@ public class TokenService {
 		return token;
 	}
 	
-	
+	Boolean validateAccessToken(CustomUser user, String accessToken){
+		Token currentToken = findTokenByUser(user);
+		
+		if(currentToken != null && currentToken.getAccessToken().equals(accessToken)){
+			if(currentToken.getCreationDate().isBeforeNow()){
+				throw new RuntimeException("Token Expired !");
+			}else{
+				return true;
+			}
+		}else{
+			throw new InvalidParameterException("Wrong access token !");
+		}
+	}
 	
 	private String randomString(){
 		char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWWYZ0123456789".toCharArray();

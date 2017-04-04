@@ -55,21 +55,69 @@ public class AuthService {
 			
 		Map<String, String> res = new HashMap<>();
 		res.put("user_id", String.valueOf(user.getId()));
-		res.put("access-token", userToken.getAccessToken());
+		res.put("access_token", userToken.getAccessToken());
 		res.put("refresh_token", userToken.getRefreshToken());
 		
 		return res;
 	}
 	
 	public Map<String, String> getToken(String refreshToken, Long userID){
+		
+		if(refreshToken == null || refreshToken.isEmpty()){
+			throw new InvalidParameterException("refreshToken should not be null or empty");
+		}
+		if(userID == null || userID.intValue() == 0){
+			throw new InvalidParameterException("userID should not be null or empty");
+		}
+		
 		CustomUser user = userRepository.findOne(userID);
 		Token token = tokenService.refreshToken(user, refreshToken);
 		
 		Map<String, String> res = new HashMap<>();
 		res.put("user_id", String.valueOf(user.getId()));
-		res.put("access-token", token.getAccessToken());
+		res.put("access_token", token.getAccessToken());
 		res.put("refresh_token", token.getRefreshToken());
 		
+		return res;
+	}
+	
+	public Map<String, String> detailsUser(String accessToken, Long userID, Long selectedUserId){
+		
+		if(accessToken == null || accessToken.isEmpty()){
+			throw new InvalidParameterException("refreshToken should not be null or empty");
+		}
+		if(userID == null || userID.intValue() == 0){
+			throw new InvalidParameterException("userID should not be null or empty");
+		}
+		if(selectedUserId == null || selectedUserId.intValue() == 0){
+			throw new InvalidParameterException("selectedUserId should not be null or empty");
+		}
+		
+		CustomUser currentUser = userRepository.findOne(userID);
+		if(currentUser == null){
+			throw new RuntimeException(String.format("User with id : %s don't exist", userID.toString()));
+		}
+		tokenService.validateAccessToken(currentUser, accessToken);
+		
+		/* VERIF DROIT VOIR USER EN FNC DU GROUPE
+		if(currentUser != null){
+			if(!currentUser.getGroup().equals("Admin")){
+				throw new 403 //TODO
+			}
+		}
+		*/
+		
+		CustomUser selectedUser = userRepository.findOne(selectedUserId);
+		
+		if(selectedUser == null){
+			throw new RuntimeException(String.format("User with id : %s don't exist", selectedUserId.toString()));
+		}
+		
+		Map<String, String> res = new HashMap<>();
+			res.put("user_login", selectedUser.getLogin());
+		res.put("user_password", selectedUser.getPassword());
+		res.put("user_mail", selectedUser.getMail());
+		res.put("user_group", selectedUser.getGroup());
 		return res;
 	}
 }
