@@ -12,7 +12,7 @@ import model.Lesson;
 @Component
 public interface LessonRepository extends CrudRepository<Lesson, Long> {
 	
-	@Query(value= "select l.* FROM Lesson l WHERE l.lessonUid = :lessonUid")
+	@Query(value= "select l FROM Lesson l WHERE l.lessonUid = :lessonUid")
 	public Lesson findLessonByUid(@Param("lessonUid")String lessonUid);
 
 }

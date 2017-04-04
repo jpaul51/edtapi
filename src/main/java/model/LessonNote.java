@@ -16,9 +16,22 @@ public class LessonNote {
 	String description;
 	int importanceLevel;
 	
-	public LessonNote()
-	{
+	public LessonNote()	{
 		
+	}
+	
+	public LessonNote(long id, String title, String description, int importanceLevel){
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.importanceLevel = importanceLevel;
+				
+	}
+
+	public LessonNote(String title, String description, int importanceLevel) {
+		this.title = title;
+		this.description = description;
+		this.importanceLevel = importanceLevel;
 	}
 
 	public long getId() {
@@ -89,8 +102,5 @@ public class LessonNote {
 			return false;
 		return true;
 	}
-	
-	
-	
-	
+
 }

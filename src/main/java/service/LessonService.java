@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.InvalidParameterException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,11 +21,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import dao.CustomUserRepository;
+import dao.LessonNoteRepository;
 import dao.LessonRepository;
 import dao.RoomRepository;
 import model.CustomUser;
 import model.Lesson;
+import model.LessonNote;
 import model.Room;
+import web.LessonNoteBody;
 
 @Service
 @Qualifier("LessonService")
@@ -52,6 +57,7 @@ public class LessonService {
 	@Autowired LessonRepository lessonRepo;
 	@Autowired RoomRepository roomRepo;
 	@Autowired CustomUserRepository userRepo;
+	@Autowired LessonNoteRepository lessonNoteRepo;
 	
 	public void loadLessons()
 	{
@@ -178,7 +184,61 @@ public class LessonService {
 		roomRepo.save(roomsByName.values());
 		return lessons;
 	}
-	
-	public Lesson findLessonByUid(String )
-	
+	public void AddLessonNote(String lessonId, LessonNoteBody lessonNoteBody) {
+		
+		testLessonBody(lessonNoteBody);
+		
+		Lesson lesson = lessonRepo.findLessonByUid(lessonId);
+		if(lesson== null){
+			throw new RuntimeException("aucune leçon trouvée avec cette id : " + lessonId); 
+		}
+		
+		int importanceLevel = Integer.parseInt(lessonNoteBody.importance);	
+		LessonNote ls = new LessonNote(lessonNoteBody.title,lessonNoteBody.description, importanceLevel);
+		
+		lessonNoteRepo.save(ls);
+		lesson.getLessonNotes().add(ls);
+		lessonRepo.save(lesson);
+	}
+
+
+	private void testLessonBody(LessonNoteBody lessonNoteBody) {
+		if(lessonNoteBody.title == null || lessonNoteBody.title.isEmpty()){
+			throw new InvalidParameterException("parametre invalide, titre de la note null");
+		}	
+		if(lessonNoteBody.description == null || lessonNoteBody.description.isEmpty()){
+			throw new InvalidParameterException("parametre invalide, description de la note null");
+		}
+		if(lessonNoteBody.importance == null || lessonNoteBody.importance.isEmpty()){
+			throw new InvalidParameterException("parametre invalide, importance de la note null");
+		}
+	}
+
+	public void EditLessonNote(String lessonId, String noteId, LessonNoteBody lessonNoteBody) {
+			Lesson lesson = lessonRepo.findLessonByUid(lessonId);
+			if(lesson == null){
+				throw new RuntimeException("aucune leçon trouvée avec cette id : " + lessonId);
+			}
+			
+			testLessonBody(lessonNoteBody);
+			
+			long idNote = Long.parseLong(noteId);
+			int importanceLevel = Integer.parseInt(lessonNoteBody.importance);
+			
+			Boolean flag = false;
+			for (LessonNote  ls : lesson.getLessonNotes()) {
+				if (ls.getId() == idNote){
+					ls.setTitle(lessonNoteBody.title);
+					ls.setDescription(lessonNoteBody.description);
+					ls.setImportanceLevel(importanceLevel);
+					flag = true;
+					lessonNoteRepo.save(ls);
+					lessonRepo.save(lesson);
+					break;
+				}
+			}
+			if(flag.equals(false)){
+				throw new RuntimeException("aucune lessonNote trouvé avec l'id : " +idNote);
+			}
+		}	
 }
