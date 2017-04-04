@@ -97,13 +97,11 @@ public class AuthService {
 		}
 		tokenService.validateAccessToken(currentUser, accessToken);
 		
-		/* VERIF DROIT VOIR USER EN FNC DU GROUPE
 		if(currentUser != null){
-			if(!currentUser.getGroup().equals("Admin")){
-				throw new 403 //TODO
+			if(!currentUser.getGroup().equals("admin") || !currentUser.getGroup().equals("teacher")){
+				throw new RuntimeException("insufficient permission !");
 			}
 		}
-		*/
 		
 		CustomUser selectedUser = userRepository.findOne(selectedUserId);
 		
@@ -146,13 +144,11 @@ public class AuthService {
 		}
 		tokenService.validateAccessToken(currentUser, accessToken);
 		
-		/* VERIF DROIT VOIR USER EN FNC DU GROUPE
 		if(currentUser != null){
-			if(!currentUser.getGroup().equals("Admin")){
-				throw new 403 //TODO
+			if(!currentUser.getGroup().equals("admin") || !currentUser.getGroup().equals("teacher")){
+				throw new RuntimeException("insufficient permission !");
 			}
 		}
-		*/
 		
 		CustomUser newUser = new CustomUser();
 		newUser.setLogin(body.login);
@@ -181,13 +177,11 @@ public void editUser(String accessToken, Long userID, UserBody body, Long select
 		}
 		tokenService.validateAccessToken(currentUser, accessToken);
 		
-		/* VERIF DROIT VOIR USER EN FNC DU GROUPE
 		if(currentUser != null){
-			if(!currentUser.getGroup().equals("Admin")){
-				throw new 403 //TODO
+			if(!currentUser.getGroup().equals("admin") || !currentUser.getGroup().equals("teacher")){
+				throw new RuntimeException("insufficient permission !");
 			}
 		}
-		*/
 		
 		CustomUser selectedUser = userRepository.findOne(selectedUserId);
 		if(selectedUser == null){
