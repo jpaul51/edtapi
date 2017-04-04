@@ -1,10 +1,12 @@
 package service;
 
 import java.security.InvalidParameterException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import model.CustomUser;
 import model.Token;
-import model.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ public class AuthService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private TokenService tokenService;
 	
 	public Map<String, String> login(LoginBody loginBody){
 		
@@ -34,14 +38,26 @@ public class AuthService {
 		if(loginBody.password == null || loginBody.password.isEmpty()){
 			throw new InvalidParameterException("password should not be null or empty");
 		}
+				
+		CustomUser user = userRepository.findByLogin(loginBody.login);
 		
-		User user = new User();
+		if(user == null){
+			//TODO  USER DONT EXIST 
+		}else{
+			if(user.getLogin() != null && !user.getLogin().isEmpty() && user.getPassword() != null && !user.getPassword().isEmpty()){
+				if(!user.getPassword().equals(loginBody.password)){
+					//TODO WRONG PASSWORD
+				}
+			}
+		}
 		
-		userRepository.findOne(Long.valueOf(1));
+		Token userToken = tokenService.findTokenByUser(user);
+			
+		Map<String, String> res = new HashMap<>();
+		res.put("user_id", String.valueOf(user.getId()));
+		res.put("access-token", userToken.getAccessToken());
+		res.put("refresh_token", userToken.getRefreshToken());
 		
-		Token token = authRepository.findByUser(user);
-		System.out.println(token.getAccessToken());
-		
-		return null;
+		return res;
 	}
 }

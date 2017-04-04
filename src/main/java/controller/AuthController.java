@@ -5,7 +5,7 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import model.Token;
-import model.User;
+import model.CustomUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -39,7 +39,6 @@ public class AuthController {
 	@ResponseBody
 	public Map<String, String> login(@RequestBody LoginBody body)
 	{
-		
 		return authService.login(body);
 	}
 	
@@ -47,16 +46,14 @@ public class AuthController {
 	@ResponseBody
 	public String login()
 	{
-		User user = new User();
-		user.setLogin("zob");
+		CustomUser user = new CustomUser();
+		user.setLogin("proximaTest");
+		user.setMail("proxima@example.com");
+		user.setPassword("amixorp/2017");
+		
 		repo.save(user);
 		
-		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-		
-		Token token = new Token();
-		token.setAccessToken("JUSTINE EST MON NOM");
-		auth.save(token);
-		return "zob";
+		return "USER CREATED";
 	}
 	
 }

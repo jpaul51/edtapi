@@ -1,8 +1,10 @@
 package dao;
 
 
+import java.util.List;
+
+import model.CustomUser;
 import model.Token;
-import model.User;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -11,7 +13,4 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface AuthRepository extends CrudRepository<Token, Long> {
-	
-	@Query( value = "Select t from Token t where t.user = :user" )
-	Token findByUser(@Param("user") User user);
 }
