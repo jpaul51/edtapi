@@ -5,13 +5,16 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+import service.AuthService;
+import service.LessonService;
+import controller.AuthController;
 import controller.InitController;
+import dao.LessonRepository;
+
 
 @SpringBootApplication
 @EnableAutoConfiguration
-@ComponentScan(basePackageClasses=InitController.class)
-@ComponentScan("controller")
-@ComponentScan("service")
+@ComponentScan(basePackageClasses = {AuthController.class, InitController.class, LessonService.class, AuthService.class, LessonRepository.class})
 public class EdtApiApplication {
 
 	public static void main(String[] args) {
