@@ -42,7 +42,7 @@ public class AuthController {
 		return authService.login(body);
 	}
 	
-	@RequestMapping(value = "/proxima/user/login", method = RequestMethod.GET)
+	@RequestMapping(value = "proxima/debug/addUser", method = RequestMethod.GET)
 	@ResponseBody
 	public String login()
 	{

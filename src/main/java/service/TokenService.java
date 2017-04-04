@@ -22,9 +22,25 @@ public class TokenService {
 		token.setUser(user);
 		token.setAccessToken(randomString());
 		token.setRefreshToken(randomString());
-		token.setCreationDate(new DateTime());
+		token.setCreationDate(new DateTime().plusHours(1)); //Access token available for 1H
 		
 		tokenRepository.save(token);
+		
+		return token;
+	}
+	
+	Token refreshToken(CustomUser user, String refreshToken){
+		Token token = findTokenByUser(user);
+		
+		if(token == null){
+			token = createToken(user);
+		} else {
+			if (token.getRefreshToken().equals(refreshToken)){
+				token = createToken(user);
+			} else {
+				throw new RuntimeException(String.format("wrong refresh token for user with login : %s", user.getLogin()));
+			}
+		}
 		
 		return token;
 	}
@@ -32,10 +48,12 @@ public class TokenService {
 	Token findTokenByUser(CustomUser user){
 		Token token = tokenRepository.findTokenByUser(user);
 		
-		if(token != null){
-			
-		} else {
+		if(token == null){
 			token = createToken(user);
+		}
+		
+		if(token.getCreationDate().isBeforeNow()){
+			throw new RuntimeException("Token Expired !");
 		}
 		
 		return token;

@@ -42,11 +42,11 @@ public class AuthService {
 		CustomUser user = userRepository.findByLogin(loginBody.login);
 		
 		if(user == null){
-			//TODO  USER DONT EXIST 
+			throw new RuntimeException(String.format("User with login : %s don't exist", loginBody.login));
 		}else{
 			if(user.getLogin() != null && !user.getLogin().isEmpty() && user.getPassword() != null && !user.getPassword().isEmpty()){
 				if(!user.getPassword().equals(loginBody.password)){
-					//TODO WRONG PASSWORD
+					throw new RuntimeException(String.format("User or Password Wrong for login : %s", loginBody.login));
 				}
 			}
 		}
