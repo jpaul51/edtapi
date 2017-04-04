@@ -64,9 +64,9 @@ public class InitController {
 	
 	@RequestMapping(value="/lessonsByResourceName",method = RequestMethod.GET)
 	@ResponseBody
-	public List<Lesson> getLessonsByresourceName(@RequestParam("name") String name)
+	public List<Lesson> getLessonsByresourceName(@RequestParam("name") String name,  @RequestParam("date_start")Optional<Long> dateStart,@RequestParam("date_end") Optional<Long> dateEnd)
 	{
-		 return (List<Lesson>) lessonService.getLessonsByResourceName(name);
+		 return (List<Lesson>) lessonService.getLessonsByResourceName(name,dateStart,dateEnd);
 	
 	}
 
