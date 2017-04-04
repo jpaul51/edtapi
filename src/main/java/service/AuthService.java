@@ -60,4 +60,16 @@ public class AuthService {
 		
 		return res;
 	}
+	
+	public Map<String, String> getToken(String refreshToken, Long userID){
+		CustomUser user = userRepository.findOne(userID);
+		Token token = tokenService.refreshToken(user, refreshToken);
+		
+		Map<String, String> res = new HashMap<>();
+		res.put("user_id", String.valueOf(user.getId()));
+		res.put("access-token", token.getAccessToken());
+		res.put("refresh_token", token.getRefreshToken());
+		
+		return res;
+	}
 }
