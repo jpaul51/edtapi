@@ -2,7 +2,6 @@ C:\Users\lp\Desktop\projet\edtapi\src\main\java\model\CustomUser.java
 C:\Users\lp\Desktop\projet\edtapi\src\main\java\model\Lesson.java
 C:\Users\lp\Desktop\projet\edtapi\src\main\java\model\Token.java
 C:\Users\lp\Desktop\projet\edtapi\src\main\java\com\iem\EdtApiApplication.java
-C:\Users\lp\Desktop\projet\edtapi\src\main\java\web\LoginResponse.java
 C:\Users\lp\Desktop\projet\edtapi\src\main\java\dao\LessonRepository.java
 C:\Users\lp\Desktop\projet\edtapi\src\main\java\controller\AuthController.java
 C:\Users\lp\Desktop\projet\edtapi\src\main\java\dao\UserRepository.java
@@ -13,8 +12,8 @@ C:\Users\lp\Desktop\projet\edtapi\src\main\java\model\LessonNote.java
 C:\Users\lp\Desktop\projet\edtapi\src\main\java\web\LoginBody.java
 C:\Users\lp\Desktop\projet\edtapi\src\main\java\service\LessonService.java
 C:\Users\lp\Desktop\projet\edtapi\src\main\java\service\TokenService.java
-C:\Users\lp\Desktop\projet\edtapi\src\main\java\dao\AuthRepository.java
 C:\Users\lp\Desktop\projet\edtapi\src\main\java\dao\RoomRepository.java
+C:\Users\lp\Desktop\projet\edtapi\src\main\java\web\UserBody.java
 C:\Users\lp\Desktop\projet\edtapi\src\main\java\dao\TokenRepository.java
 C:\Users\lp\Desktop\projet\edtapi\src\main\java\model\Group.java
 C:\Users\lp\Desktop\projet\edtapi\src\main\java\service\AuthService.java

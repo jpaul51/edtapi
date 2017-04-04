@@ -11,15 +11,13 @@ import model.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dao.AuthRepository;
 import dao.UserRepository;
 import web.LoginBody;
+import web.UserBody;
 
 @Service
 public class AuthService {
 	
-	@Autowired
-	private AuthRepository authRepository;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -119,5 +117,96 @@ public class AuthService {
 		res.put("user_mail", selectedUser.getMail());
 		res.put("user_group", selectedUser.getGroup());
 		return res;
+	}
+	
+	public void addUser(String accessToken, Long userID, UserBody body){
+		
+		if(accessToken == null || accessToken.isEmpty()){
+			throw new InvalidParameterException("refreshToken should not be null or empty");
+		}
+		if(userID == null || userID.intValue() == 0){
+			throw new InvalidParameterException("userID should not be null or empty");
+		}
+		if(body.login == null || body.login.isEmpty()){
+			throw new InvalidParameterException("login should not be null or empty");
+		}
+		if(body.mail == null || body.mail.isEmpty()){
+			throw new InvalidParameterException("mail should not be null or empty");
+		}
+		if(body.password == null || body.password.isEmpty()){
+			throw new InvalidParameterException("password should not be null or empty");
+		}
+		if(body.group == null || body.group.isEmpty()){
+			throw new InvalidParameterException("group should not be null or empty");
+		}
+		
+		CustomUser currentUser = userRepository.findOne(userID);
+		if(currentUser == null){
+			throw new RuntimeException(String.format("User with id : %s don't exist", userID.toString()));
+		}
+		tokenService.validateAccessToken(currentUser, accessToken);
+		
+		/* VERIF DROIT VOIR USER EN FNC DU GROUPE
+		if(currentUser != null){
+			if(!currentUser.getGroup().equals("Admin")){
+				throw new 403 //TODO
+			}
+		}
+		*/
+		
+		CustomUser newUser = new CustomUser();
+		newUser.setLogin(body.login);
+		newUser.setPassword(body.password);
+		newUser.setMail(body.mail);
+		newUser.setUserGroup(body.group);
+		
+		userRepository.save(newUser);
+	}
+	
+public void editUser(String accessToken, Long userID, UserBody body, Long selectedUserId){
+		
+		if(accessToken == null || accessToken.isEmpty()){
+			throw new InvalidParameterException("refreshToken should not be null or empty");
+		}
+		if(userID == null || userID.intValue() == 0){
+			throw new InvalidParameterException("userID should not be null or empty");
+		}
+		if(selectedUserId == null || selectedUserId.intValue() == 0){
+			throw new InvalidParameterException("selectedUserId should not be null or empty");
+		}
+		
+		CustomUser currentUser = userRepository.findOne(userID);
+		if(currentUser == null){
+			throw new RuntimeException(String.format("User with id : %s don't exist", userID.toString()));
+		}
+		tokenService.validateAccessToken(currentUser, accessToken);
+		
+		/* VERIF DROIT VOIR USER EN FNC DU GROUPE
+		if(currentUser != null){
+			if(!currentUser.getGroup().equals("Admin")){
+				throw new 403 //TODO
+			}
+		}
+		*/
+		
+		CustomUser selectedUser = userRepository.findOne(selectedUserId);
+		if(selectedUser == null){
+			throw new RuntimeException(String.format("User with id : %s don't exist", selectedUserId.toString()));
+		}
+		
+		if(body.login != null && !body.login.isEmpty()){
+			selectedUser.setLogin(body.login);
+		}
+		if(body.password != null && !body.password.isEmpty()){
+			selectedUser.setPassword(body.password);
+		}
+		if(body.mail != null && !body.mail.isEmpty()){
+			selectedUser.setMail(body.mail);
+		}
+		if(body.group != null && !body.group.isEmpty()){
+			selectedUser.setUserGroup(body.group);
+		}
+	
+		userRepository.save(selectedUser);
 	}
 }

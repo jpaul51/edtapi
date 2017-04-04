@@ -9,13 +9,12 @@ import service.AuthService;
 import service.LessonService;
 import controller.AuthController;
 import controller.InitController;
-import dao.AuthRepository;
 import dao.LessonRepository;
 
 
 @SpringBootApplication
 @EnableAutoConfiguration
-@ComponentScan(basePackageClasses = {AuthController.class, InitController.class, LessonService.class, AuthService.class, AuthRepository.class, LessonRepository.class})
+@ComponentScan(basePackageClasses = {AuthController.class, InitController.class, LessonService.class, AuthService.class, LessonRepository.class})
 public class EdtApiApplication {
 
 	public static void main(String[] args) {

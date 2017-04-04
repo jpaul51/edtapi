@@ -4,20 +4,16 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import model.Token;
-import model.CustomUser;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.*;
 
-import dao.AuthRepository;
 import dao.UserRepository;
 import service.AuthService;
 import web.LoginBody;
-import web.LoginResponse;
+import web.UserBody;
 
 @RestController
 @Configuration
@@ -31,9 +27,6 @@ public class AuthController {
 	
 	@Autowired
 	private UserRepository repo;
-	
-	@Autowired
-	private AuthRepository 	auth;
 
 	@RequestMapping(value = "/proxima/users/login", method = RequestMethod.POST)
 	@ResponseBody
@@ -59,18 +52,24 @@ public class AuthController {
 		return authService.detailsUser(accessToken, userId, selectedUserId);
 	}
 	
-	@RequestMapping(value = "proxima/debug/addUser", method = RequestMethod.GET)
+	@RequestMapping(value = "proxima/users", method = RequestMethod.POST)
 	@ResponseBody
-	public String login()
+	public void addUser(
+			@RequestHeader(value = "access_token") String accessToken,
+			@RequestHeader(value = "user_id") Long userId,
+			@RequestBody UserBody body)
 	{
-		CustomUser user = new CustomUser();
-		user.setLogin("proximaTest");
-		user.setMail("proxima@example.com");
-		user.setPassword("amixorp/2017");
-		
-		repo.save(user);
-		
-		return "USER CREATED";
+		authService.addUser(accessToken, userId, body);
 	}
 	
+	@RequestMapping(value = "proxima/users/{user_id}", method = RequestMethod.PUT)
+	@ResponseBody
+	public void editUser(
+			@RequestHeader(value = "access_token") String accessToken,
+			@RequestHeader(value = "user_id") Long userId,
+			@RequestBody UserBody body,
+			@PathVariable("user_id") Long selectedUserId)
+	{
+		authService.editUser(accessToken, userId, body, selectedUserId);
+	}
 }
