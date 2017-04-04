@@ -13,6 +13,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -184,7 +185,7 @@ public class LessonService {
 	}
 	
 	
-	public Iterable<Lesson> getLessonsByResourceName(String resourceName)
+	public Iterable<Lesson> getLessonsByResourceName(String resourceName,Optional<Long> timeStampStart, Optional<Long> timeStampEnd)
 	{
 //		List<String[]> resources = (List<String[]>) lessonRepo.findAvailableResourceNames();
 //		
@@ -194,8 +195,24 @@ public class LessonService {
 //		}
 		
 		System.out.println(resourceName);
+		 DateTime dtStart;
+		 DateTime dtEnd;
 		
-		List<Lesson> lessons = (List<Lesson>) lessonRepo.findLessonsByResourceName(resourceName);
+		 if(timeStampStart.isPresent())
+		  dtStart = new DateTime(timeStampStart.get());
+		 else
+			 dtStart = new DateTime();
+		 if(timeStampEnd.isPresent())
+		  dtEnd = new DateTime(timeStampEnd.get());
+		 else
+		 {
+			 dtEnd=new DateTime();
+			 dtEnd = dtEnd.plusWeeks(1);
+		 }
+		
+		 System.out.println("DSTART: "+(dtStart.toString("yyyy-MM-dd HH:mm:ss")));
+		 System.out.println(dtEnd.toString("yyyy-MM-dd HH:mm:ss"));
+		List<Lesson> lessons = (List<Lesson>) lessonRepo.findLessonsByResourceName(resourceName,dtStart,dtEnd);
 		System.out.println(lessons.size());
 		return lessons;
 		
