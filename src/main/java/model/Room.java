@@ -13,7 +13,7 @@ public class Room {
 	@Id @GeneratedValue
 	Long id;
 	String name;
-	
+	boolean isComputerScienceRoom;
 	
 	public Room()
 	{

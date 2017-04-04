@@ -11,7 +11,9 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.util.List;
+import java.util.Optional;
 
+import org.hibernate.annotations.Synchronize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
@@ -45,8 +47,10 @@ public class InitController {
 	public void initDb()
 	{
 		 lessonService.loadLessons();
-	
+		 
 	}
+	
+	
 	
 	
 	@RequestMapping(value="/lessons",method = RequestMethod.GET)
@@ -57,6 +61,45 @@ public class InitController {
 	
 	}
 
+	
+	@RequestMapping(value="/lessonsByResourceName",method = RequestMethod.GET)
+	@ResponseBody
+	public List<Lesson> getLessonsByresourceName(@RequestParam("name") String name)
+	{
+		 return (List<Lesson>) lessonService.getLessonsByResourceName(name);
+	
+	}
+
+
+	
+	@RequestMapping(value="/addResource",method = RequestMethod.GET)
+	@ResponseBody
+	public void addResource(@RequestParam("id")String resourceId, @RequestParam("name") String resourceName, @RequestParam("date_start")Optional<Long> dateStart,@RequestParam("date_end") Optional<Long> dateEnd)
+	{
+		 lessonService.addEdtResource(resourceName, resourceId,dateStart,dateEnd);
+	
+	}
+	
+	
+	@RequestMapping(value="/updateResourcebyName",method = RequestMethod.GET)
+	@ResponseBody
+	public void updateResourceByName( @RequestParam("name") String resourceName,  @RequestParam("date_start")Optional<Long> dateStart,@RequestParam("date_end") Optional<Long> dateEnd)
+	{
+		 lessonService.updateResource(resourceName,dateStart,dateEnd);
+	
+	}
+	
+	
+	@RequestMapping(value="/getResourceList",method = RequestMethod.GET)
+	@ResponseBody
+	public void getResourceList()
+	{
+		 lessonService.getResourceList();
+	
+	}
+	
+
+	
 	
 	@RequestMapping(value="/load",method = RequestMethod.GET)
 	public String loadResource(@RequestParam String id)

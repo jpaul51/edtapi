@@ -1,19 +1,22 @@
 package model;
 
+import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -35,19 +38,25 @@ public class Lesson {
 	DateTime dateCreate;
 	
 	@JsonProperty("lesson_notes")
-	@OneToMany
+	@ManyToMany
+	@ElementCollection
 	List<LessonNote> lessonNotes;
 	
 	//The combination of these fields should be unique
 	
 	@ManyToOne
 	Room room;
-	
+
+	@JsonProperty("date_start")
 	DateTime dateStart; 
+	@JsonProperty("date_end")
 	DateTime dateEnd; 
 	
 	String description;
 	
+	@JsonIgnore
+	@ElementCollection
+	List<String> resourcesName;
 	
 	public Lesson()
 	{
@@ -58,14 +67,15 @@ public class Lesson {
 
 	public Lesson(Lesson oldLesson) {
 		this.title = oldLesson.getTitle();
-		this.dateUpdate = oldLesson.getDateUpdate();
-		this.dateCreate = oldLesson.getDateCreate();
+		this.dateUpdate = oldLesson.dateUpdate;
+		this.dateCreate = oldLesson.dateCreate;
 		this.lessonNotes = oldLesson.getLessonNotes();
 		this.room = oldLesson.getRoom();
-		this.dateStart = oldLesson.getDateStart();
-		this.dateEnd = oldLesson.getDateEnd();
+		this.dateStart = oldLesson.dateStart;
+		this.dateEnd = oldLesson.dateEnd;
 		this.description = oldLesson.getDescription();
-		this.lessonUid = oldLesson.getlessonUid();
+		this.lessonUid = oldLesson.getLessonUid();
+		this.resourcesName = oldLesson.resourcesName;
 	}
 
 
@@ -122,6 +132,9 @@ public class Lesson {
 
 
 
+
+
+
 	public Long getId() {
 		return id;
 	}
@@ -134,14 +147,14 @@ public class Lesson {
 
 
 
-	public String getlessonUid() {
+	public String getLessonUid() {
 		return lessonUid;
 	}
 
 
 
-	public void setlessonUid(String uID) {
-		lessonUid = uID;
+	public void setLessonUid(String lessonUid) {
+		this.lessonUid = lessonUid;
 	}
 
 
@@ -158,8 +171,9 @@ public class Lesson {
 
 
 
-	public DateTime getDateUpdate() {
-		return dateUpdate;
+	public Timestamp getDateUpdate() {
+		
+		return new Timestamp(dateUpdate.getMillis());
 	}
 
 
@@ -170,8 +184,8 @@ public class Lesson {
 
 
 
-	public DateTime getDateCreate() {
-		return dateCreate;
+	public Timestamp getDateCreate() {
+		return new Timestamp(dateCreate.getMillis());
 	}
 
 
@@ -206,8 +220,8 @@ public class Lesson {
 
 
 
-	public DateTime getDateStart() {
-		return dateStart;
+	public Timestamp getDateStart() {
+		return new Timestamp(dateStart.getMillis());
 	}
 
 
@@ -218,8 +232,8 @@ public class Lesson {
 
 
 
-	public DateTime getDateEnd() {
-		return dateEnd;
+	public Timestamp getDateEnd() {
+		return new Timestamp(dateEnd.getMillis());
 	}
 
 
@@ -238,6 +252,21 @@ public class Lesson {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+
+
+
+
+
+	public List<String> getResourcesName() {
+		return resourcesName;
+	}
+
+
+
+	public void setResourcesName(List<String> resourcesName) {
+		this.resourcesName = resourcesName;
 	}
 
 
