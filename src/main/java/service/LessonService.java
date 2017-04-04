@@ -49,7 +49,7 @@ public class LessonService {
 	
 	
 	
-	 @Autowired LessonRepository lessonRepo;
+	@Autowired LessonRepository lessonRepo;
 	@Autowired RoomRepository roomRepo;
 	@Autowired CustomUserRepository userRepo;
 	
@@ -59,8 +59,6 @@ public class LessonService {
 		
 		CustomUser user = new CustomUser();
 		user.setLogin("test");
-		
-		
 		
 		lessonRepo.save(lessons);
 		userRepo.save(user);
@@ -180,5 +178,7 @@ public class LessonService {
 		roomRepo.save(roomsByName.values());
 		return lessons;
 	}
+	
+	public Lesson findLessonByUid(String )
 	
 }

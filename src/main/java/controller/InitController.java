@@ -25,11 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import model.Lesson;
 import service.LessonService;
 
-
-
-
-
-
 @RestController
 @Configuration
 @EnableJpaRepositories("dao")
@@ -46,7 +41,6 @@ public class InitController {
 	public void initDb()
 	{
 		 lessonService.loadLessons();
-	
 	}
 	
 	
@@ -90,7 +84,6 @@ public class InitController {
 				}
 		
 		return "oui";
-	}
-	
+	}	
 	
 }
