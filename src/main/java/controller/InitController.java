@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import model.EdtResource;
 import model.Lesson;
 import service.LessonService;
 
@@ -87,9 +88,9 @@ public class InitController {
 	
 	@RequestMapping(value="/getResourceList",method = RequestMethod.GET)
 	@ResponseBody
-	public void getResourceList()
+	public Iterable<EdtResource> getResourceList()
 	{
-		 lessonService.getResourceList();
+		return  lessonService.getResourceList();
 	
 	}
 	
